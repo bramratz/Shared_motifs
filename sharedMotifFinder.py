@@ -72,20 +72,23 @@ with open(sys.argv[1]) as f:
                 tempList = [line,]
         # Add sequences to the tempList if no ID is encountered
         else:
-            for char in line:
-                if char == "\n":
-                    pass
-                else:
-                    tempList.append(char)
+            tempList.append(line)
     # Handles sequence for last ID
     else:
         DNAStringArray.append(tempList[1:]) # Add sequences to list
 
+# Save first two sequences from 
+seq1, seq2, *rest = [item for item in DNAStringArray]
+seq1 = ''.join(seq1) 
+seq2 = ''.join(seq2)
+
 # Find common motifs among the first two sequences to start the comparison
-motifs = compare2(DNAStringArray[0], DNAStringArray[1])
+motifs = compare2(seq1, seq2)
 
 # Filter based on similarities in the other sequences 
-for i in DNAStringArray[2:]:
-    motifs = commonMotif(motifs, i)
+for i in rest:
+    seq = ''.join(i)
+    motifs = commonMotif(motifs, seq)
 
 print(motifs) # Motifs common among all sequences 
+print(max(motifs, key=len)) # Return the longest item
